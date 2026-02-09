@@ -9,7 +9,7 @@ deployment:
     - cd $REPOPATH
     
     # 3. Install PHP dependencies (Download composer.phar locally first because global doesn't work)
-    - /usr/local/bin/ea-php82 -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - /usr/local/bin/ea-php82 -d allow_url_fopen=1 -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     - /usr/local/bin/ea-php82 -d allow_url_fopen=1 composer-setup.php
     - /usr/local/bin/ea-php82 -d allow_url_fopen=1 composer.phar install --no-dev --optimize-autoloader
     - rm composer-setup.php
