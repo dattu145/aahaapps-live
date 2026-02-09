@@ -118,7 +118,7 @@ const DesktopNav = () => {
                             href="https://profile.aahaapps.com/login"
                             className="bg-[#1DBF57] text-white px-8 py-3 rounded-full text-lg font-bold shadow hover:bg-green-600 transition"
                         >
-                            Log
+                            Login
                         </a>
                     </div>
                 </div>
