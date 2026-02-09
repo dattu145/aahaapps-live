@@ -3,7 +3,7 @@ deployment:
   tasks:
     # 1. Define the path to your Laravel project within the repository
     # CHANGE 'repositories/aahaapps' to your actual cPanel repo path
-    - export REPOPATH=$HOME/repositories/aahaapps/AahaApps_Laravel
+    - export REPOPATH=$HOME/repositories/aahaapps-live/AahaApps_Laravel
     
     # 2. Enter the directory
     - cd $REPOPATH
