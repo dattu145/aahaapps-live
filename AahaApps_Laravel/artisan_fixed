@@ -1,0 +1,21 @@
+#!/usr/bin/env php8.2 -d upload_max_filesize=1024M -d post_max_size=1024M -d memory_limit=1024M
+#!/usr/bin/env php8.2
+
+
+<?php
+
+use Illuminate\Foundation\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+define('LARAVEL_START', microtime(true));
+
+// Register the Composer autoloader...
+require __DIR__.'/vendor/autoload.php';
+
+// Bootstrap Laravel and handle the command...
+/** @var Application $app */
+$app = require_once __DIR__.'/bootstrap/app.php';
+
+$status = $app->handleCommand(new ArgvInput);
+
+exit($status);
