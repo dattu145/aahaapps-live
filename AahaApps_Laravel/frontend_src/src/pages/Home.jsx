@@ -79,6 +79,7 @@ const Home = () => {
 
     return (
         <div className="space-y-12">
+            <h1>Hi this is Dattu</h1>
             <div className="flex flex-col gap-12">
                 {contentItems.map((item, index) => {
                     if (item.type === 'banner') {
