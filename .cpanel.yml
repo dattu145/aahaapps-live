@@ -8,9 +8,12 @@ deployment:
     # 2. Enter the directory
     - cd $REPOPATH
     
-    # 3. Install PHP dependencies
-    # CHANGE 'ea-php82' to your server's PHP version (e.g., ea-php81, ea-php83)
-    - /usr/local/bin/ea-php82 /usr/local/bin/composer install --no-dev --optimize-autoloader
+    # 3. Install PHP dependencies (Download composer.phar locally first because global doesn't work)
+    - /usr/local/bin/ea-php82 -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    - /usr/local/bin/ea-php82 -d allow_url_fopen=1 composer-setup.php
+    - /usr/local/bin/ea-php82 -d allow_url_fopen=1 composer.phar install --no-dev --optimize-autoloader
+    - rm composer-setup.php
+    - rm composer.phar
     
     # 4. Run database migrations (Ensure .env is set up first!)
     - /usr/local/bin/ea-php82 artisan migrate --force
