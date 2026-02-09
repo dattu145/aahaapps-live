@@ -1,21 +1,24 @@
+---
 deployment:
   tasks:
-    - /bin/echo "--- STARTING DEPLOYMENT FROM $(pwd) ---"
+    # 1. Define the path to your Laravel project within the repository
+    # CHANGE 'repositories/aahaapps' to your actual cPanel repo path
+    - export REPOPATH=$HOME/repositories/aahaapps/AahaApps_Laravel
     
-    # 1. Install Server Dependencies
-    - cd server && npm install --production
+    # 2. Enter the directory
+    - cd $REPOPATH
     
-    # 2. Deploy Frontend Build (Relative Paths)
-    # We remove the old public folder and copy the new dist folder content
-    - /bin/rm -rf server/public
-    - /bin/mkdir -p server/public
-    - /bin/cp -R client/dist/* server/public/
-
-    # 3. Ensure Uploads Directory Exists
-    - /bin/mkdir -p server/uploads
-
-    # 4. Restart Node App
-    - /bin/mkdir -p server/tmp
-    - /bin/touch server/tmp/restart.txt
+    # 3. Install PHP dependencies
+    # CHANGE 'ea-php82' to your server's PHP version (e.g., ea-php81, ea-php83)
+    - /usr/local/bin/ea-php82 /usr/local/bin/composer install --no-dev --optimize-autoloader
     
-    - /bin/echo "--- DEPLOYMENT COMPLETE ---"
+    # 4. Run database migrations (Ensure .env is set up first!)
+    - /usr/local/bin/ea-php82 artisan migrate --force
+    
+    # 5. Clear caches
+    - /usr/local/bin/ea-php82 artisan config:cache
+    - /usr/local/bin/ea-php82 artisan route:cache
+    - /usr/local/bin/ea-php82 artisan view:cache
+    
+    # 6. Link Storage (creates public/storage symlink)
+    - /usr/local/bin/ea-php82 artisan storage:link
