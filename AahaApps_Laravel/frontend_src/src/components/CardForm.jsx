@@ -69,15 +69,19 @@ const CardForm = ({ initialData, onSuccess, onCancel }) => {
     useEffect(() => {
         if (initialData) {
             // Only switch to video if there's an actual video file path (not null, empty, or 'null' string)
-            const hasVideo = initialData.section2_video &&
-                initialData.section2_video !== 'null' &&
-                initialData.section2_video.trim() !== '';
+
 
             // Fix null descriptions
             const cleanDescription = (initialData.description === null ||
                 initialData.description === 'null')
                 ? ''
                 : initialData.description;
+
+            // Only switch to video if there's a valid video file path
+            const hasVideo = initialData.section2_video &&
+                initialData.section2_video !== 'null' &&
+                initialData.section2_video !== 'DELETE' &&
+                initialData.section2_video.trim() !== '';
 
             setFormData({
                 ...initialData,
@@ -101,6 +105,14 @@ const CardForm = ({ initialData, onSuccess, onCancel }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Helper to auto-format links
+    const formatLink = (url) => {
+        if (!url) return '';
+        if (url.startsWith('/')) return url; // Internal link
+        if (url.startsWith('http://') || url.startsWith('https://')) return url; // Already valid
+        return 'https://' + url; // Assume external and prepend https
     };
 
     const handleVideoOptionChange = (e) => {
@@ -214,14 +226,23 @@ const CardForm = ({ initialData, onSuccess, onCancel }) => {
         const data = new FormData();
         data.append('title', formData.title || '');
         data.append('description', formData.description || '');
-        data.append('enquiry_link', formData.enquiry_link || '');
+
+        // Apply link formatting
+        data.append('enquiry_link', formatLink(formData.enquiry_link || ''));
+
         data.append('card_bg_color', formData.card_bg_color || '#ffffff');
         data.append('title_color', formData.title_color || '#000000');
         data.append('desc_color', formData.desc_color || '#555555');
-        data.append('buttons', JSON.stringify(formData.buttons || []));
+
+        // Format button links too
+        const formattedButtons = (formData.buttons || []).map(btn => ({
+            ...btn,
+            link: btn.type === 'link' ? formatLink(btn.link) : btn.link
+        }));
+        data.append('buttons', JSON.stringify(formattedButtons));
+
         data.append('section1_images', JSON.stringify(formData.section1_images || []));
         data.append('thumbnail_width', formData.thumbnail_width || 160);
-
         data.append('thumbnail_height', formData.thumbnail_height || 104);
         data.append('video_options', JSON.stringify(formData.video_options || {}));
 

@@ -80,6 +80,18 @@ class PageController extends Controller
         }
     }
 
+    // TinyMCE Image Upload Handler
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads'), $filename);
+            return response()->json(['url' => asset('uploads/' . $filename)]);
+        }
+        return response()->json(['message' => 'No image uploaded'], 400);
+    }
+
     // Delete page
     public function destroy($id)
     {

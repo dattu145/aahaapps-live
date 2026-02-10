@@ -39,6 +39,8 @@ Route::post('/settings', [SettingController::class, 'update']);
 // Route::post('/settings/bulk', [SettingController::class, 'updateBulk']);
 
 // Pages
+// Support Image Upload First
+Route::post('/pages/upload-image', [PageController::class, 'uploadImage']);
 Route::apiResource('pages', PageController::class);
 // Banners
 Route::apiResource('banners', BannerController::class);
