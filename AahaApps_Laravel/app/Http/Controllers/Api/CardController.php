@@ -69,6 +69,12 @@ class CardController extends Controller
             if (!isset($data['enquiry_link']) && isset($data['link'])) {
                 $data['enquiry_link'] = $data['link'];
             }
+            if (!isset($data['link']) && isset($data['enquiry_link'])) {
+                $data['link'] = $data['enquiry_link'];
+            }
+            if (!isset($data['link'])) {
+                 $data['link'] = ''; // Prevent 1364 error if DB is strict
+            }
             
             // Map legacy fields if present
             if (isset($data['thumbnail_width'])) $data['section1_image_width'] = $data['thumbnail_width'];
